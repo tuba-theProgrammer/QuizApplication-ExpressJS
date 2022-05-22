@@ -68,9 +68,9 @@ span{
   </style>  
 </head>    
 <body>    
-    <h2>SignUp Page</h2><br>    
+    <h2><%- locals.title %> </h2><br>    
     <div class="SignUp">    
-    <form method="get" action="login.php"> 
+    <form method="post" action="/signUp"> 
 
         <label ><b>User Name     
         </b>    
@@ -91,9 +91,10 @@ span{
         
         <input type="button" name="createAccount" id="createAccount" value="SignUp">       
         <br><br>    
-        <input type="button" name="log" id="log" value="Already have account?">       
-
-    </form>     
+    </form>  
+    <ul>
+        <li><a href="/login">Already have an account?</a></li>
+    </ul>     
 </div>    
 </body>    
 </html> 

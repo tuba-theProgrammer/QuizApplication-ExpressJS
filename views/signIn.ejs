@@ -23,7 +23,7 @@ h2{
     padding: 20px;  
 }  
 label{  
- 
+    
     font-size: 25px;  
 }  
 #Uname{  
@@ -61,9 +61,9 @@ span{
   </style>  
 </head>    
 <body>    
-    <h2>Login Page</h2><br>    
+    <h2><%- locals.title%></h2><br>    
     <div class="login">    
-    <form method="get" action="login.php"> 
+    <form method="post" action="/login"> 
 
         <label ><b>User Name     
         </b>    
@@ -77,9 +77,10 @@ span{
         <br><br>    
         <input type="button" name="log" id="log" value="Log In Here">       
         <br><br>    
-        <input type="button" name="createAccount" id="log" value="Don't have account?">       
-
-    </form>     
+    </form>   
+    <ul>
+        <li><a href="/signUp">Don't have an account?</a></li>
+    </ul>  
 </div>    
 </body>    
 </html> 
