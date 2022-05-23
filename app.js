@@ -41,7 +41,7 @@ app.post('/signUp',(req,res)=>{
         return res.redirect("/signup");
       }
       console.log(user);
-      res.redirect("/quizScreen");
+      res.redirect("/dashboard");
     });
  
 })
@@ -53,8 +53,8 @@ app.get('/login',(req,res)=>{
   res.render("signIn.ejs",{
     title:'Login Page',
    })
-
 })
+
 
 app.post('/login',(req,res)=>{
      userModel.findOne({
@@ -69,14 +69,12 @@ app.post('/login',(req,res)=>{
          console.log("user not found")
          return res.status(404).send()
        }
-       return res.redirect('/quizScreen')
+       return res.redirect('/dashboard')
      })
 })
 
-app.get('/quizScreen',(req,res)=>{
-  res.render('QuizPage',{
-    name:"tuba"
-  })
+app.get('/dashboard',(req,res)=>{
+  res.render('dashboard')
 })
 
 // handling user logout
