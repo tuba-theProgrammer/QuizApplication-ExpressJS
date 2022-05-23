@@ -9,6 +9,7 @@ app.use(bodyParser.urlencoded({extended:true}))
 app.set("view engine","ejs")
 
 const userModel = require("./models/Users")
+const quizModel = require("./models/QuizModel")
 app.use(express.static(path.join(__dirname,'public')))
 
 const mongoDb='mongodb+srv://tubaAsif:shabana1234@cluster0.soo8g.mongodb.net/?retryWrites=true&w=majority'
@@ -57,6 +58,7 @@ app.get('/login',(req,res)=>{
 
 
 app.post('/login',(req,res)=>{
+  console.log(req.body.password)
      userModel.findOne({
        name:req.body.name,
        password:req.body.password
@@ -81,6 +83,21 @@ app.get('/dashboard',(req,res)=>{
 app.get('/createQuiz',(req,res)=>{
   res.render('createQuizPage')
 })
+
+app.post('/createQuiz',(req,res)=>{
+  quizModel.create(req.body,(err,user)=>{
+    console.log(req.body)
+    if(err){
+       console.log(err.msg)
+     res.redirect('/')
+    }else{
+      alert('question added successfully')
+      return res.redirect('/createQuiz')
+    }
+   
+  })
+})
+
 
 app.get('/PlayQuiz',(req,res)=>{
    res.sendFile(path.join(__dirname,'/public/html/playQuiz.html'))
