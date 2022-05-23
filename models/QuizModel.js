@@ -1,16 +1,15 @@
 const mongoose= require('mongoose')
 
 const quizModel= new mongoose.Schema({
-    Question: {
+    question: {
         type: String,
-        required: true,
       },
-      Options:[{type: String}],
+      options:[{type: String}],
       RightAnswer:{
          type : String,
       },
       CreatedBy:{
-          type:ObjectId
+          type:mongoose.Schema.ObjectId
       }
 })
 

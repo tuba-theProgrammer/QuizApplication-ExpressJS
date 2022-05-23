@@ -84,20 +84,61 @@ app.get('/createQuiz',(req,res)=>{
   res.render('createQuizPage')
 })
 
-app.post('/createQuiz',(req,res)=>{
-  quizModel.create(req.body,(err,user)=>{
+app.post('/addQuestion',async (req,res)=>{
+  // const addQ= new quizModel({
+  //   Question:req.body.Question,
+  //   Options:req.body.Options,
+  //   RighAnswer:req.body.RighAnswer,
+  //   CreatedBy: req.query._id
+  // })
+  await quizModel.create( req.body,(err,user)=>{
     console.log(req.body)
     if(err){
-       console.log(err.msg)
+       console.log(err)
      res.redirect('/')
     }else{
-      alert('question added successfully')
+     
       return res.redirect('/createQuiz')
     }
    
   })
 })
 
+app.get('/ViewQuestions', async(req,res)=>{
+  const data= await quizModel.find()
+  res.render('ViewAllQuiz',{data})
+})
+
+app.get('/deleteQuestion', async(req,res)=>{
+  const {id}= req.query
+  await quizModel.findByIdAndRemove(id)
+  const data= await quizModel.find()
+  res.render('ViewAllQuiz',{data})
+})
+
+
+app.get('/UpdateQuestion', async(req,res)=>{
+  const {id}= req.query
+
+  console.log(id)
+  const data= await quizModel.findById(id)
+  console.log(data)
+  res.render('UpdateQuiz',{data})
+})
+
+app.post('/UpdateQuestion', async(req,res)=>{
+  const {id} = req.query
+  const {question,options,RightAnswer}=req.body
+  console.log(id)
+  console.log(req.body)
+  quizModel.findByIdAndUpdate(id,{question:question,options:options,RightAnswer:RightAnswer},(err,doc)=>{
+    if(err){
+     return res.redirect('/UpdateQuestion')
+    }
+    return res.redirect('/ViewQuestions')
+  })
+  
+})
 
 app.get('/PlayQuiz',(req,res)=>{
    res.sendFile(path.join(__dirname,'/public/html/playQuiz.html'))
@@ -113,6 +154,8 @@ app.get('/ShowScore',(req,res)=>{
 app.get('/logout',(req,res)=>{
   console.log('logging out')
 })
+
+
 
 app.use('*',(req,res)=>{
   res.status(404).json({msg:"Not found"})
