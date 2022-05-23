@@ -4,28 +4,11 @@ const path = require('path')
 var mongoose = require('mongoose')
 var bodyParser= require('body-parser')
 app.set(express.static(path.join(__dirname,"/public")))
-
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 app.set("view engine","ejs")
 
-const passport = require('passport')
-const localStrategy = require('passport-local')
-const passportLocalMongoose= require('passport-local-mongoose')
-const user= require('./models/Users')
-
-app.use(require("express-session")({
-  secret:"Any normal Word",       //decode or encode session
-  resave: false,          
-  saveUninitialized:false    
-}));
-
-
-passport.serializeUser(User.serializeUser());       //session encoding
-passport.deserializeUser(User.deserializeUser());   //session decoding
-passport.use(new LocalStrategy(User.authenticate()));
-app.use(passport.initialize());
-app.use(passport.session());
+const userModel = require("./models/Users")
 
 
 const mongoDb='mongodb+srv://tubaAsif:shabana1234@cluster0.soo8g.mongodb.net/?retryWrites=true&w=majority'
@@ -50,6 +33,19 @@ app.get('/signUp',(req,res)=>{
     title:'Registration Page',
   })
 })
+app.post('/signUp',(req,res)=>{
+ 
+    userModel.create(req.body, (err, user) => {
+      console.log(req.body)
+      if (err) {
+        return res.redirect("/signup");
+      }
+      console.log(user);
+      res.redirect("/quizScreen");
+    });
+ 
+})
+
 
 
 // showing Login page
@@ -58,6 +54,29 @@ app.get('/login',(req,res)=>{
     title:'Login Page',
    })
 
+})
+
+app.post('/login',(req,res)=>{
+     userModel.findOne({
+       name:req.body.name,
+       password:req.body.password
+     },(err,user)=>{
+       if(err){
+         console.log(err)
+         return res.status(500).send()
+       }
+       if(!user){
+         console.log("user not found")
+         return res.status(404).send()
+       }
+       return res.redirect('/quizScreen')
+     })
+})
+
+app.get('/quizScreen',(req,res)=>{
+  res.render('QuizPage',{
+    name:"tuba"
+  })
 })
 
 // handling user logout
@@ -70,6 +89,6 @@ app.use('*',(req,res)=>{
 })
 
 
-app.listen(5000,()=>{
+app.listen(3001,()=>{
   console.log('hello mai ab phir ap hi ko sun rha hn')
 })
