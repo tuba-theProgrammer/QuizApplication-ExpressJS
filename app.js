@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({extended:true}))
 app.set("view engine","ejs")
 
 const userModel = require("./models/Users")
-
+app.use(express.static(path.join(__dirname,'public')))
 
 const mongoDb='mongodb+srv://tubaAsif:shabana1234@cluster0.soo8g.mongodb.net/?retryWrites=true&w=majority'
 mongoose.connect(mongoDb, /*We place this to remove warning*/{ useNewUrlParser:
@@ -76,6 +76,21 @@ app.post('/login',(req,res)=>{
 app.get('/dashboard',(req,res)=>{
   res.render('dashboard')
 })
+
+
+app.get('/createQuiz',(req,res)=>{
+  res.render('createQuizPage')
+})
+
+app.get('/PlayQuiz',(req,res)=>{
+   res.sendFile(path.join(__dirname,'/public/html/playQuiz.html'))
+})
+
+app.get('/ShowScore',(req,res)=>{
+
+})
+
+
 
 // handling user logout
 app.get('/logout',(req,res)=>{
